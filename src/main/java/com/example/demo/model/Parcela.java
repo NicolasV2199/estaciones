@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="Parcelas")
 public class Parcela {
@@ -32,6 +34,7 @@ public class Parcela {
 	//Relacion Parcela-Muestreo
 	@ManyToOne
 	@JoinColumn(name="idmuestreo")
+	@JsonIgnoreProperties("parcelas")
 	private Muestreo muestreo;
 
 	public Parcela(long id, float latitud, float longitud, float area, String descripcion, Muestreo muestreo) {

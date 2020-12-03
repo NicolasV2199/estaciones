@@ -7,6 +7,7 @@ import com.example.demo.model.Parcela;
 
 
 public interface ParcelaRepository extends JpaRepository<Parcela, Long> {
+	
 
 }
 
