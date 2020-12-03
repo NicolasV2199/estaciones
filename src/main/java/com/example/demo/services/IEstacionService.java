@@ -14,4 +14,5 @@ public interface IEstacionService {
 	
 	List<Estacion> listarTodasEstaciones();
 	Estacion buscarEstacionId(Long id);
+	Estacion buscarEstacionNombre(String nombre);
 }

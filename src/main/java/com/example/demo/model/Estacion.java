@@ -18,8 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
-@Table(name="Estaciones")
-@JsonIgnoreProperties("usuario")
+@Table(name="estaciones")
 public class Estacion {
 
 	@Id
@@ -44,10 +43,12 @@ public class Estacion {
 	//Relacion Estacion - Usuario
 	@ManyToOne
 	@JoinColumn(name="idusuario")
+	@JsonIgnoreProperties("estaciones")
 	private Usuario usuario;
 	
 	//Relacion Estacion - Muestreo
 	@OneToOne(mappedBy="estacion")
+	@JsonIgnoreProperties("estacion")
 	private Muestreo muestreo; 
 
 

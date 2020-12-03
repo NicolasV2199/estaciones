@@ -40,4 +40,9 @@ public class EstacionServiceImp implements IEstacionService {
 		return er.getOne(id);
 	}
 
+	@Override
+	public Estacion buscarEstacionNombre(String nombre) {
+		return er.findByNombre(nombre);
+	}
+
 }
