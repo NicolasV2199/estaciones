@@ -20,7 +20,7 @@ import com.example.demo.model.Usuario;
 import com.example.demo.services.IUsuarioService;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UsuarioController {
 
@@ -39,13 +39,13 @@ public class UsuarioController {
 	*/
 	
 	//CREAR UN USUARIO
-	@PostMapping("/crear")
+	@PostMapping("/usuario/crear")
 	public Usuario crear(@RequestBody Usuario u) {
 		return us.crearUsuario(u);
 	}
 	
 	//EDITAR UN USUARIO
-	@PutMapping("/editar/{id}")
+	@PutMapping("/usuario/editar/{id}")
 	public Usuario editar(@RequestBody Usuario u, @PathVariable("id") Long id) {
 		Usuario oldUsuario = us.buscarUsuarioId(id);
 		
@@ -68,16 +68,21 @@ public class UsuarioController {
 	}
 	
 	//ELIMINAR UN USUARIO
-	@DeleteMapping("/eliminar/{id}")
+	@DeleteMapping("/usuario/eliminar/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
 		Usuario u = us.buscarUsuarioId(id);
 		us.eliminarUsuario(u);
 	}
 	
 	//LISTANDO TODOS LOS USUARIOS
-	@GetMapping("/listarusuarios")
+	@GetMapping("/usuario/listarusuarios")
 	public List<Usuario> listarUsuarios(){
 		return us.listarTodosUsuarios();
+	}
+	
+	@GetMapping("/usuario/obtener/{id}")
+	public Usuario obtenerUsuarios(@PathVariable("id") Long id){
+		return us.buscarUsuarioId(id);
 	}
 
 }
