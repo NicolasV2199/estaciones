@@ -60,6 +60,9 @@ public class EstacionController {
 		String region = c.getRegion();
 		oldEstacion.setRegion(region);
 		
+		String unidad = c.getUnidad();
+		oldEstacion.setUnidad(unidad);
+		
 		float latitud = c.getLatitud();
 		oldEstacion.setLatitud(latitud);
 		

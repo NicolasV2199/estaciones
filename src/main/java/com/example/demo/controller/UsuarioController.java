@@ -26,7 +26,7 @@ public class UsuarioController {
 
 	@Autowired IUsuarioService us;
 	
-/*http://localhost:8080/usuario/...*/
+	/*http://localhost:8080/usuario/...*/
 	
 	/*Datos de prueba
 	 {

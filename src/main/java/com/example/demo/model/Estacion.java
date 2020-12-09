@@ -35,6 +35,9 @@ public class Estacion {
 	private String region;
 	
 	@Column
+	private String unidad;
+	
+	@Column
 	private float latitud;
 	
 	@Column
@@ -137,6 +140,13 @@ public class Estacion {
 		this.muestreo = muestreo;
 	}
 
-	
+	public String getUnidad() {
+		return unidad;
+	}
+
+	public void setUnidad(String unidad) {
+		this.unidad = unidad;
+	}
+
 	
 }
