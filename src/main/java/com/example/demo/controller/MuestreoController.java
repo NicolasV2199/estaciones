@@ -21,7 +21,7 @@ import com.example.demo.model.Parcela;
 import com.example.demo.services.IMuestreoService;
 
 @RestController
-@RequestMapping("/muestreo")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class MuestreoController {
 
@@ -39,13 +39,13 @@ public class MuestreoController {
 	*/
 	
 	//CREAR UNA MUESTREO
-	@PostMapping("/crear")
+	@PostMapping("/muestreo/crear")
 	public Muestreo crear(@RequestBody Muestreo m) {
 		return ms.crearMuestreo(m);
 	}
 	
 	//EDITAR UNA ESTACION
-	@PutMapping("/editar/{id}")
+	@PutMapping("/muestreo/editar/{id}")
 	public Muestreo editar(@RequestBody Muestreo m, @PathVariable("id") Long id) {
 		Muestreo oldMuestreo = ms.buscarMuestreoId(id);
 		
@@ -65,16 +65,21 @@ public class MuestreoController {
 	}
 	
 	//ELIMINAR UN MUESTREO
-	@DeleteMapping("/eliminar/{id}")
+	@DeleteMapping("/muestreo/eliminar/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
 		Muestreo m = ms.buscarMuestreoId(id);
 		ms.eliminarMuestreo(m);
 	}
 	
 	//LISTANDO TODAS LAS ESTACIONES
-	@GetMapping("/listarmuestreos")
+	@GetMapping("/muestreo/listarmuestreos")
 	public List<Muestreo> listarMuestreos(){
 		return ms.listarTodosMuestreos();
+	}
+	
+	@GetMapping("/muestreo/obtener/{id)")
+	public Muestreo obtener(@PathVariable("id") Long id) {
+		return ms.buscarMuestreoId(id);
 	}
 
 }

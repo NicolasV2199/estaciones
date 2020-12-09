@@ -20,7 +20,7 @@ import com.example.demo.model.Parcela;
 import com.example.demo.services.IParcelaService;
 
 @RestController
-@RequestMapping("/parcela")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ParcelaController {
 
@@ -39,13 +39,13 @@ public class ParcelaController {
 	 * */
 	
 	//CREAR UNA PARCELA
-	@PostMapping("/crear")
+	@PostMapping("/parcela/crear")
 	public Parcela crear(@RequestBody Parcela p) {
 		return ps.crearParcela(p);
 	}
 	
 	//EDITAR UNA PARCELA
-	@PutMapping("/editar/{id}")
+	@PutMapping("/parcela/editar/{id}")
 	public Parcela editar(@RequestBody Parcela p, @PathVariable("id") Long id) {
 		Parcela oldParcela = ps.buscarParcelaId(id);
 		
@@ -68,14 +68,14 @@ public class ParcelaController {
 	}
 	
 	//ELIMINAR UNA PARCELA
-	@DeleteMapping("/eliminar/{id}")
+	@DeleteMapping("/parcela/eliminar/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
 		Parcela p = ps.buscarParcelaId(id);
 		ps.eliminarParcela(p);
 	}
 	
 	//LISTANDO TODAS LAS PARCELAS
-	@GetMapping("/listarparcelas")
+	@GetMapping("/parcela/listarparcelas")
 	public List<Parcela> listarParcelas(){
 		return ps.listarTodasParcelas();
 	}
