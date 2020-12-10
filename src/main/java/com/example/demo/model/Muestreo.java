@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,13 +31,13 @@ public class Muestreo {
 	private float area;
 	
 	//Relacion Muestreo - Estacion
-	@OneToOne
+	@OneToOne(orphanRemoval = true)
 	@JoinColumn(name="estacion_id", referencedColumnName = "id")
 	@JsonIgnoreProperties("muestreo")
 	private Estacion estacion;
 	
 	//Relacion Muestreo - Parcela
-	@OneToMany(mappedBy="muestreo")
+	@OneToMany(mappedBy="muestreo",cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnoreProperties("muestreo")
 	private Set<Parcela>parcelas;	
 
