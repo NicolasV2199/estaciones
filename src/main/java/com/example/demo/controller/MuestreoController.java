@@ -22,7 +22,7 @@ import com.example.demo.services.IMuestreoService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3000/ingreso"})
 public class MuestreoController {
 
 	@Autowired IMuestreoService ms;
