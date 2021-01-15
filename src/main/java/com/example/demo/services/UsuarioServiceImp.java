@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class UsuarioServiceImp implements IUsuarioService{
 	}
 
 	@Override
-	public void eliminarUsuario(Usuario u) {
-		ur.delete(u);
+	public void eliminarUsuario(Long id) {
+		ur.deleteById(id);
 		
 	}
 
@@ -37,8 +38,8 @@ public class UsuarioServiceImp implements IUsuarioService{
 	}
 
 	@Override
-	public Usuario buscarUsuarioId(Long id) {
-		return ur.getOne(id);
+	public Optional<Usuario> buscarUsuarioId(Long id) {
+		return ur.findById(id);
 	}
 
 }

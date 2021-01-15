@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.model.Parcela;
 
@@ -8,9 +9,9 @@ import com.example.demo.model.Parcela;
 public interface IParcelaService {
 	Parcela crearParcela(Parcela p);
 	Parcela actualizarParcela(Parcela p); 
-	void eliminarParcela(Parcela p);
+	void eliminarParcela(Long p);
 	
 	
 	List<Parcela> listarTodasParcelas();
-	Parcela buscarParcelaId(Long id);
+	Optional<Parcela> buscarParcelaId(Long id);
 }

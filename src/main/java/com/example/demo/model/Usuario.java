@@ -16,8 +16,6 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
-//comentario de prueba
-
 @Entity
 @Table(name="usuarios")
 @JsonIgnoreProperties("estaciones")

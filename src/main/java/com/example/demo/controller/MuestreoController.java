@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,77 @@ import com.example.demo.model.Parcela;
 import com.example.demo.services.IMuestreoService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/muestreo")
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:3000/ingreso"})
 public class MuestreoController {
 
 	@Autowired IMuestreoService ms;
 	
+	//CREAR UNA MUESTREO
+	@PostMapping("/crear")
+	public Muestreo crear(@RequestBody Muestreo m) {
+		return ms.crearMuestreo(m);
+	}
+	
+	//EDITAR UN MUESTREO
+	@PutMapping("/editar/{id}")
+	public Muestreo editar(@RequestBody Muestreo m, @PathVariable("id") Long id) {
+		
+		if(id!=null) {
+			Optional<Muestreo> old = ms.buscarMuestreoId(id);
+			if(old.isPresent()) {
+				Muestreo oldMuestreo = old.get();
+				
+				char tipo = m.getTipo();
+				oldMuestreo.setTipo(tipo);
+				
+				float area = m.getArea();
+				oldMuestreo.setArea(area);
+				
+				Estacion estacion = m.getEstacion();
+				oldMuestreo.setEstacion(estacion);
+				
+				Set<Parcela> parcelas = m.getParcelas();
+				oldMuestreo.setParcelas(parcelas);
+				
+				return ms.actualizarMuestreo(oldMuestreo);
+			}
+		}
+		
+		return null;
+	}
+	
+	//ELIMINAR UN MUESTREO
+	@DeleteMapping("/eliminar/{id}")
+	public void eliminar(@PathVariable("id") Long id) {
+		
+		if(id!=null) {
+			ms.eliminarMuestreo(id);
+		}
+	}
+	
+	//LISTANDO TODOS LOS MUESTREOS
+	@GetMapping("/listarmuestreos")
+	public List<Muestreo> listarMuestreos(){
+		return ms.listarTodosMuestreos();
+	}
+	
+	//LISTANDO UN MUESTREO
+	@GetMapping("/obtener/{id)")
+	public Muestreo obtener(@PathVariable("id") Long id) {
+		
+		if(id!=null) {
+			Optional<Muestreo> m =  ms.buscarMuestreoId(id);
+			if(m.isPresent()) {
+				return m.get();
+			}
+		}
+		return null;
+	}
+	
 /*http://localhost:8080/muestreo/...*/
 	
-	/*VALORES DE PRUEBA
+	/*Ejempli JSON esperado para crear un muestreo
 	{
     "tipo" : "C", 
     "area" : null,
@@ -37,49 +100,5 @@ public class MuestreoController {
     "parcelas": null
 	}
 	*/
-	
-	//CREAR UNA MUESTREO
-	@PostMapping("/muestreo/crear")
-	public Muestreo crear(@RequestBody Muestreo m) {
-		return ms.crearMuestreo(m);
-	}
-	
-	//EDITAR UNA ESTACION
-	@PutMapping("/muestreo/editar/{id}")
-	public Muestreo editar(@RequestBody Muestreo m, @PathVariable("id") Long id) {
-		Muestreo oldMuestreo = ms.buscarMuestreoId(id);
-		
-		char tipo = m.getTipo();
-		oldMuestreo.setTipo(tipo);
-		
-		float area = m.getArea();
-		oldMuestreo.setArea(area);
-		
-		Estacion estacion = m.getEstacion();
-		oldMuestreo.setEstacion(estacion);
-		
-		Set<Parcela> parcelas = m.getParcelas();
-		oldMuestreo.setParcelas(parcelas);
-		
-		return ms.actualizarMuestreo(oldMuestreo);
-	}
-	
-	//ELIMINAR UN MUESTREO
-	@DeleteMapping("/muestreo/eliminar/{id}")
-	public void eliminar(@PathVariable("id") Long id) {
-		Muestreo m = ms.buscarMuestreoId(id);
-		ms.eliminarMuestreo(m);
-	}
-	
-	//LISTANDO TODAS LAS ESTACIONES
-	@GetMapping("/muestreo/listarmuestreos")
-	public List<Muestreo> listarMuestreos(){
-		return ms.listarTodosMuestreos();
-	}
-	
-	@GetMapping("/muestreo/obtener/{id)")
-	public Muestreo obtener(@PathVariable("id") Long id) {
-		return ms.buscarMuestreoId(id);
-	}
 
 }

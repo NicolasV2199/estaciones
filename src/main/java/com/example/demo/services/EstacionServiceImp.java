@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,8 @@ public class EstacionServiceImp implements IEstacionService {
 	}
 
 	@Override
-	public void eliminarEstacion(Estacion c) {
-		er.delete(c);
+	public void eliminarEstacion(Long id) {
+		er.deleteById(id);
 
 	}
 
@@ -36,8 +37,8 @@ public class EstacionServiceImp implements IEstacionService {
 	}
 
 	@Override
-	public Estacion buscarEstacionId(Long id) {
-		return er.getOne(id);
+	public Optional<Estacion> buscarEstacionId(Long id) {
+		return er.findById(id);
 	}
 
 	@Override

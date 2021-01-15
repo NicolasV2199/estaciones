@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,87 @@ import com.example.demo.model.Usuario;
 import com.example.demo.services.IUsuarioService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/usuario")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UsuarioController {
 
 	@Autowired IUsuarioService us;
 	
+	//CREAR UN USUARIO
+	@PostMapping("/crear")
+	public Usuario crear(@RequestBody Usuario u) {
+		return us.crearUsuario(u);
+	}
+	
+	//EDITAR UN USUARIO
+	@PutMapping("/editar/{id}")
+	public Usuario editar(@RequestBody Usuario u, @PathVariable("id") Long id) {
+		
+		if(id!=null) {
+			
+			Optional<Usuario> old = us.buscarUsuarioId(id);
+			
+			if(old.isPresent()) {
+				
+				Usuario oldUsuario = old.get();
+				
+				String aux;
+				
+				aux = u.getPrimerNombre();
+				oldUsuario.setPrimerNombre(aux);
+				
+				aux = u.getPrimerApellido();
+				oldUsuario.setPrimerApellido(aux);
+				
+				aux = u.getEmail();
+				oldUsuario.setEmail(aux);
+				
+				aux = u.getPassword();
+				oldUsuario.setPassword(aux);
+				
+				Set<Estacion> estaciones = u.getEstaciones();
+				oldUsuario.setEstaciones(estaciones);
+				
+				return us.actualizarUsuario(oldUsuario);
+				
+			}
+		}
+		
+		return null;
+		
+	}
+	
+	//ELIMINAR UN USUARIO
+	@DeleteMapping("/eliminar/{id}")
+	public void eliminar(@PathVariable("id") Long id) {
+		Optional<Usuario> u = us.buscarUsuarioId(id);
+		if(u.isPresent()) {
+			us.eliminarUsuario(id);
+		}
+		
+	}
+	
+	//LISTANDO TODOS LOS USUARIOS
+	@GetMapping("/listarusuarios")
+	public List<Usuario> listarUsuarios(){
+		return us.listarTodosUsuarios();
+	}
+	
+	//LISTAR UN USUARIO
+	@GetMapping("/obtener/{id}")
+	public Usuario obtenerUsuarios(@PathVariable("id") Long id){
+		Optional<Usuario> u = us.buscarUsuarioId(id);
+		if(id!=null) {
+			if(u.isPresent()) {
+				return u.get();
+			}
+		}
+		return null;
+	}
+	
 	/*http://localhost:8080/usuario/...*/
 	
-	/*Datos de prueba
+	/*Ejempli JSON esperado para crear Usuario
 	 {
     "primerNombre": "Andres",
     "primerApellido": "Perez",
@@ -37,52 +110,5 @@ public class UsuarioController {
     "estaciones" : [{"id": "1"}]
 	} 
 	*/
-	
-	//CREAR UN USUARIO
-	@PostMapping("/usuario/crear")
-	public Usuario crear(@RequestBody Usuario u) {
-		return us.crearUsuario(u);
-	}
-	
-	//EDITAR UN USUARIO
-	@PutMapping("/usuario/editar/{id}")
-	public Usuario editar(@RequestBody Usuario u, @PathVariable("id") Long id) {
-		Usuario oldUsuario = us.buscarUsuarioId(id);
-		
-		String primerNombre = u.getPrimerNombre();
-		oldUsuario.setPrimerNombre(primerNombre);
-		
-		String primerApellido = u.getPrimerApellido();
-		oldUsuario.setPrimerApellido(primerApellido);
-		
-		String email = u.getEmail();
-		oldUsuario.setEmail(email);
-		
-		String password = u.getPassword();
-		oldUsuario.setPassword(password);
-		
-		Set<Estacion> estaciones = u.getEstaciones();
-		oldUsuario.setEstaciones(estaciones);
-		
-		return us.actualizarUsuario(oldUsuario);
-	}
-	
-	//ELIMINAR UN USUARIO
-	@DeleteMapping("/usuario/eliminar/{id}")
-	public void eliminar(@PathVariable("id") Long id) {
-		Usuario u = us.buscarUsuarioId(id);
-		us.eliminarUsuario(u);
-	}
-	
-	//LISTANDO TODOS LOS USUARIOS
-	@GetMapping("/usuario/listarusuarios")
-	public List<Usuario> listarUsuarios(){
-		return us.listarTodosUsuarios();
-	}
-	
-	@GetMapping("/usuario/obtener/{id}")
-	public Usuario obtenerUsuarios(@PathVariable("id") Long id){
-		return us.buscarUsuarioId(id);
-	}
 
 }

@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,21 +22,96 @@ import com.example.demo.services.IEstacionService;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/estacion")
 @CrossOrigin(origins = "http://localhost:3000")
 public class EstacionController {
 
 	@Autowired IEstacionService es;
 	
-/*http://localhost:8080/estacion/...*/
 	
 	//CREAR UNA ESTACION
-	@PostMapping("/estacion/crear")
+	@PostMapping("/crear")
 	public Estacion crear(@RequestBody Estacion c) {
 		return es.crearEstacion(c);
 	}
 	
-	/*valores de prueba
+	
+	//EDITAR UNA ESTACION
+	@PutMapping("/editar/{id}")
+	public Estacion editar(@RequestBody Estacion c, @PathVariable("id") Long id) {
+		Optional<Estacion> old;
+		String aux;
+		
+		if(id!=null) {
+			
+			old = es.buscarEstacionId(id);
+			
+			if(old.isPresent()) {
+				
+				Estacion oldEstacion = old.get();
+				
+				aux = c.getNombre();
+				oldEstacion.setNombre(aux);
+				
+				aux = c.getDescripcion();
+				oldEstacion.setDescripcion(aux);
+				
+				aux = c.getRegion();
+				oldEstacion.setRegion(aux);
+				
+				aux = c.getUnidad();
+				oldEstacion.setUnidad(aux);
+				
+				float coordenada = c.getLatitud();
+				oldEstacion.setLatitud(coordenada);
+				
+				coordenada = c.getLongitud();
+				oldEstacion.setLongitud(coordenada);
+				
+				Usuario usuario = c.getUsuario();
+				oldEstacion.setUsuario(usuario);
+				
+				Muestreo muestreo = c.getMuestreo();
+				oldEstacion.setMuestreo(muestreo);
+				
+				return es.actualizarEstacion(oldEstacion);
+			}
+		}
+		
+		return null;
+	}
+	
+	//ELIMINAR UNA ESTACION
+	@DeleteMapping("/eliminar/{id}")
+	public void eliminar(@PathVariable("id") Long id) {
+		if(id!=null) {
+			es.eliminarEstacion(id);
+		}
+	}
+	
+	//LISTANDO TODAS LAS ESTACIONES
+	@GetMapping("/listarestaciones")
+	public List<Estacion> listarEstaciones(){
+		return es.listarTodasEstaciones();
+	}
+	
+	//LISTANDO UNA ESTACIÓN
+	@GetMapping("/obtener/{id}")
+	public Estacion obtenerEstaciones(@PathVariable("id") Long id){
+		
+		if(id!=null) {
+			Optional<Estacion> c = es.buscarEstacionId(id);
+			if(c.isPresent()) {
+				return c.get();
+			}
+		}
+		
+		return null;
+	}
+	
+	/*http://localhost:8080/estacion/...*/
+	
+/* ejemplo JSON esperado para crear una estación
 	 * {
     "nombre": "La candelaria",
     "descripcion": "Estacion nueva",
@@ -45,56 +120,6 @@ public class EstacionController {
     "muestreos" : [{"id": "1"}]
 	}
 */
-	
-	//EDITAR UNA ESTACION
-	@PutMapping("/estacion/editar/{id}")
-	public Estacion editar(@RequestBody Estacion c, @PathVariable("id") Long id) {
-		Estacion oldEstacion = es.buscarEstacionId(id);
-		
-		String nombre = c.getNombre();
-		oldEstacion.setNombre(nombre);
-		
-		String descripcion = c.getDescripcion();
-		oldEstacion.setDescripcion(descripcion);
-		
-		String region = c.getRegion();
-		oldEstacion.setRegion(region);
-		
-		String unidad = c.getUnidad();
-		oldEstacion.setUnidad(unidad);
-		
-		float latitud = c.getLatitud();
-		oldEstacion.setLatitud(latitud);
-		
-		float longitud = c.getLongitud();
-		oldEstacion.setLongitud(longitud);
-		
-		Usuario usuario = c.getUsuario();
-		oldEstacion.setUsuario(usuario);
-		
-		Muestreo muestreo = c.getMuestreo();
-		oldEstacion.setMuestreo(muestreo);
-		
-		return es.actualizarEstacion(oldEstacion);
-	}
-	
-	//ELIMINAR UNA ESTACION
-	@DeleteMapping("/estacion/eliminar/{id}")
-	public void eliminar(@PathVariable("id") Long id) {
-		Estacion c = es.buscarEstacionId(id);
-		es.eliminarEstacion(c);
-	}
-	
-	//LISTANDO TODAS LAS ESTACIONES
-	@GetMapping("/estacion/listarestaciones")
-	public List<Estacion> listarEstaciones(){
-		return es.listarTodasEstaciones();
-	}
-	
-	@GetMapping("/estacion/obtener/{id}")
-	public Estacion obtenerEstaciones(@PathVariable("id") Long id){
-		return es.buscarEstacionId(id);
-	}
 
 }
 

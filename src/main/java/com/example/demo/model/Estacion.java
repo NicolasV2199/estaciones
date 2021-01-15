@@ -15,10 +15,10 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 @Entity
 @Table(name="estaciones")
+@JsonIgnoreProperties(ignoreUnknown = true) //ignorar campos desconocidos en un json entrante 
+											//posiblemente tambien ignora campos que estan en la bd y no en la entidad
 public class Estacion {
 
 	@Id

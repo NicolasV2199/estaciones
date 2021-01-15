@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,8 @@ public class MuestreoServiceImp implements IMuestreoService{
 	}
 
 	@Override
-	public void eliminarMuestreo(Muestreo m) {
-		mr.delete(m);
-		
+	public void eliminarMuestreo(Long id) {
+		mr.deleteById(id);
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public class MuestreoServiceImp implements IMuestreoService{
 	}
 
 	@Override
-	public Muestreo buscarMuestreoId(Long id) {
-		return mr.getOne(id);
+	public Optional<Muestreo> buscarMuestreoId(Long id) {
+		return mr.findById(id);
 	}
 
 	
