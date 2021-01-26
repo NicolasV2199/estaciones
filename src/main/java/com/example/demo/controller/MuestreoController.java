@@ -22,20 +22,20 @@ import com.example.demo.model.Parcela;
 import com.example.demo.services.IMuestreoService;
 
 @RestController
-@RequestMapping("/api/muestreo")
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3000/ingreso"})
+@RequestMapping(ConstantesController.VERSION_API+"/muestreo")
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class MuestreoController {
 
 	@Autowired IMuestreoService ms;
 	
 	//CREAR UNA MUESTREO
-	@PostMapping("/crear")
+	@PostMapping
 	public Muestreo crear(@RequestBody Muestreo m) {
 		return ms.crearMuestreo(m);
 	}
 	
 	//EDITAR UN MUESTREO
-	@PutMapping("/editar/{id}")
+	@PutMapping("/{id}")
 	public Muestreo editar(@RequestBody Muestreo m, @PathVariable("id") Long id) {
 		
 		if(id!=null) {
@@ -63,7 +63,7 @@ public class MuestreoController {
 	}
 	
 	//ELIMINAR UN MUESTREO
-	@DeleteMapping("/eliminar/{id}")
+	@DeleteMapping("/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
 		
 		if(id!=null) {
@@ -72,13 +72,13 @@ public class MuestreoController {
 	}
 	
 	//LISTANDO TODOS LOS MUESTREOS
-	@GetMapping("/listarmuestreos")
+	@GetMapping
 	public List<Muestreo> listarMuestreos(){
 		return ms.listarTodosMuestreos();
 	}
 	
 	//LISTANDO UN MUESTREO
-	@GetMapping("/obtener/{id)")
+	@GetMapping("/{id)")
 	public Muestreo obtener(@PathVariable("id") Long id) {
 		
 		if(id!=null) {

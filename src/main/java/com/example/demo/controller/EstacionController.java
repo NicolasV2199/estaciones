@@ -22,7 +22,7 @@ import com.example.demo.services.IEstacionService;
 
 
 @RestController
-@RequestMapping("/api/estacion")
+@RequestMapping(ConstantesController.VERSION_API+"/estacion")
 @CrossOrigin(origins = "http://localhost:3000")
 public class EstacionController {
 
@@ -30,14 +30,14 @@ public class EstacionController {
 	
 	
 	//CREAR UNA ESTACION
-	@PostMapping("/crear")
+	@PostMapping
 	public Estacion crear(@RequestBody Estacion c) {
 		return es.crearEstacion(c);
 	}
 	
 	
 	//EDITAR UNA ESTACION
-	@PutMapping("/editar/{id}")
+	@PutMapping("/{id}")
 	public Estacion editar(@RequestBody Estacion c, @PathVariable("id") Long id) {
 		Optional<Estacion> old;
 		String aux;
@@ -82,7 +82,7 @@ public class EstacionController {
 	}
 	
 	//ELIMINAR UNA ESTACION
-	@DeleteMapping("/eliminar/{id}")
+	@DeleteMapping("/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
 		if(id!=null) {
 			es.eliminarEstacion(id);
@@ -90,13 +90,13 @@ public class EstacionController {
 	}
 	
 	//LISTANDO TODAS LAS ESTACIONES
-	@GetMapping("/listarestaciones")
+	@GetMapping
 	public List<Estacion> listarEstaciones(){
 		return es.listarTodasEstaciones();
 	}
 	
 	//LISTANDO UNA ESTACIÓN
-	@GetMapping("/obtener/{id}")
+	@GetMapping("/{id}")
 	public Estacion obtenerEstaciones(@PathVariable("id") Long id){
 		
 		if(id!=null) {
