@@ -12,6 +12,7 @@ import javax.persistence.Id;
 
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -26,15 +27,19 @@ public class Usuario {
 	private long id; 
 	
 	@Column(nullable = false)
+	@Size(min = ConstantesModel.MIN_LENGTH_STRING_FIELD, max = ConstantesModel.MAX_LENGTH_STRING_FIELD )
 	private String primerNombre;
 	
 	@Column(nullable = false)
+	@Size(min = ConstantesModel.MIN_LENGTH_STRING_FIELD, max = ConstantesModel.MAX_LENGTH_STRING_FIELD )
 	private String primerApellido;
 	
 	@Column(nullable = false, unique = true)
+	@Size(min = ConstantesModel.MIN_LENGTH_EMAIL, max = ConstantesModel.MAX_LENGTH_STRING_FIELD )
 	private String email;
 	
 	@Column(nullable = false)
+	@Size(min = ConstantesModel.MIN_LENGTH_PASSWORD, max = ConstantesModel.MAX_LENGTH_PASSWORD)
 	private String password;
 	
 	@OneToMany(mappedBy="usuario", cascade = CascadeType.ALL, orphanRemoval = true)

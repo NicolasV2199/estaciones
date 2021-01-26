@@ -23,7 +23,7 @@ public class Muestreo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id; 
 	
-	@Column
+	@Column(nullable = false, length = ConstantesModel.MIN_LENGTH_STRING_FIELD)
 	private char tipo;
 	
 	@Column
