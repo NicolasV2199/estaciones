@@ -12,6 +12,7 @@ import javax.persistence.Id;
 
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -27,7 +28,7 @@ public class Usuario {
 	private long id; 
 	
 	@Column(nullable = false)
-	@Size(min = ConstantesModel.MIN_LENGTH_STRING_FIELD, max = ConstantesModel.MAX_LENGTH_STRING_FIELD )
+	@Size(min = ConstantesModel.MIN_LENGTH_STRING_FIELD, max = ConstantesModel.MAX_LENGTH_STRING_FIELD)
 	private String primerNombre;
 	
 	@Column(nullable = false)
@@ -107,7 +108,7 @@ public class Usuario {
 	}
 
 
-	public void setPassword(String password) {
+	public void setPassword(String password) throws ConstraintViolationException{
 		this.password = password;
 	}
 

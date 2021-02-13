@@ -42,4 +42,9 @@ public class UsuarioServiceImp implements IUsuarioService{
 		return ur.findById(id);
 	}
 
+	@Override
+	public Optional<Usuario> buscarUsuarioEmail(String email) {
+		return ur.findByEmail(email);
+	}
+
 }

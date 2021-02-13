@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import com.example.demo.services.IMuestreoService;
 @RestController
 @RequestMapping(ConstantesController.VERSION_API+"/muestreo")
 @CrossOrigin(origins = {"http://localhost:3000"})
+@PreAuthorize("Authenticated")
 public class MuestreoController {
 
 	@Autowired IMuestreoService ms;

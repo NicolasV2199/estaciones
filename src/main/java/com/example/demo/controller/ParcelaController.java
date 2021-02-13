@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.example.demo.services.IParcelaService;
 @RestController
 @RequestMapping(ConstantesController.VERSION_API+"/parcela")
 @CrossOrigin(origins = "http://localhost:3000")
+@PreAuthorize("Authenticated")
 public class ParcelaController {
 
 	@Autowired IParcelaService ps;

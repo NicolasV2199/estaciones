@@ -14,5 +14,6 @@ public interface IUsuarioService {
 	
 	List<Usuario> listarTodosUsuarios();
 	Optional<Usuario> buscarUsuarioId(Long id);
+	Optional<Usuario> buscarUsuarioEmail(String email);
 }
 
