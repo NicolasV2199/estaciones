@@ -30,7 +30,7 @@ import com.example.demo.services.IUsuarioService;
 
 @RestController
 @RequestMapping(ConstantesController.VERSION_API+"/usuario")
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = "http://localhost:3000")
 public class UsuarioController {
 
 	@Autowired IUsuarioService us;

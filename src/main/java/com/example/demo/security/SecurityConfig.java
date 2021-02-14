@@ -1,8 +1,6 @@
 package com.example.demo.security;
 
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.demo.filters.JwtAuthorizationFilter;
 import com.example.demo.services.UserDetailsServiceImp;
@@ -28,6 +23,7 @@ import com.example.demo.services.UserDetailsServiceImp;
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String LOGIN_URL = "/login";
+	private static final String LOGOUT_URL = "/logout";
 	public static final String SAVE_USER_URL = "/api/usuario";
 	
 	
@@ -47,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		 http.
+		 http.cors().
+		 and().
 		 csrf().
 		 	disable().
 		 httpBasic().
@@ -61,8 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		 		authenticated().
 		 and().
 		 logout().
-		 and().
-		 cors().
+		 	permitAll().
+		 	logoutUrl(LOGOUT_URL).
 		 and().
 		 sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		 
@@ -74,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		return new JwtAuthorizationFilter(this.authenticationManager());
 	}
 	
-	/*@Bean // configuración centralizada de cors
+	/*@Bean  configuracion centralizada de cors
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
@@ -83,14 +80,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}*/
-
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-		configuration.setAllowedMethods(Arrays.asList("POST"));
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/login", configuration);
-		return source;
-	}
 }
