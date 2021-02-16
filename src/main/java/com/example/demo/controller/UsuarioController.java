@@ -120,6 +120,18 @@ public class UsuarioController {
 		return null;
 	}
 	
+	@GetMapping("/email/{email}")
+	@PreAuthorize("Authenticated")
+	public Usuario obtenerUsuarios(@PathVariable("email") String email){
+		Optional<Usuario> u = us.buscarUsuarioEmail(email);
+		if(email!=null) {
+			if(u.isPresent()) {
+				return u.get();
+			}
+		}
+		return null;
+	}
+	
 	/*http://localhost:8080/usuario/...*/
 	
 	/*Ejempli JSON esperado para crear Usuario

@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -37,6 +39,7 @@ public class Usuario {
 	
 	@Column(nullable = false, unique = true)
 	@Size(min = ConstantesModel.MIN_LENGTH_EMAIL, max = ConstantesModel.MAX_LENGTH_STRING_FIELD )
+	@Email
 	private String email;
 	
 	@Column(nullable = false)
