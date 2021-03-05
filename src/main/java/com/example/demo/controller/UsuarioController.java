@@ -1,17 +1,12 @@
 package com.example.demo.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,26 +18,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.filters.JwtService;
+import com.example.demo.controller.exceptions.BadRequestException;
+import com.example.demo.controller.exceptions.NotFoundException;
 import com.example.demo.model.Estacion;
 import com.example.demo.model.Usuario;
 import com.example.demo.services.IUsuarioService;
 
 @RestController
-@RequestMapping(ConstantesController.VERSION_API+"/usuario")
+@RequestMapping(ConstantesController.VERSION_API+"/usuarios")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UsuarioController {
 
 	@Autowired IUsuarioService us;
-	@Autowired JwtService jwtService;
-	
-	
-	@PostMapping("/token")
-	@PreAuthorize("Authenticated")
-	public ResponseEntity<String> responseToken(@AuthenticationPrincipal User activeUser){
-		return new ResponseEntity<String>(jwtService.createToken(activeUser.getUsername(),new ArrayList<>()), HttpStatus.ACCEPTED);
-	}
-	
+
 	//CREAR UN USUARIO
 	@PostMapping
 	public Usuario crear(@RequestBody Usuario u) {
@@ -53,7 +41,7 @@ public class UsuarioController {
 	//EDITAR UN USUARIO
 	@PutMapping("/{id}")
 	@PreAuthorize("Authenticated")
-	public Usuario editar(@RequestBody Usuario u, @PathVariable("id") Long id) {
+	public Usuario editar(@RequestBody Usuario u, @PathVariable("id") Long id) throws BadRequestException{
 		
 		if(id!=null) {
 			
@@ -83,9 +71,11 @@ public class UsuarioController {
 				return us.actualizarUsuario(oldUsuario);
 				
 			}
+			
+			throw new NotFoundException("User not found");
 		}
 		
-		return null;
+		throw new BadRequestException("id Can't be null");
 		
 	}
 	
@@ -97,7 +87,7 @@ public class UsuarioController {
 		if(u.isPresent()) {
 			us.eliminarUsuario(id);
 		}
-		
+		throw new NotFoundException("User not found");
 	}
 	
 	//LISTANDO TODOS LOS USUARIOS
@@ -110,26 +100,30 @@ public class UsuarioController {
 	//LISTAR UN USUARIO
 	@GetMapping("/{id}")
 	@PreAuthorize("Authenticated")
-	public Usuario obtenerUsuarios(@PathVariable("id") Long id){
+	public Usuario obtenerUsuario(@PathVariable("id") Long id) throws BadRequestException, NotFoundException {
 		Optional<Usuario> u = us.buscarUsuarioId(id);
 		if(id!=null) {
 			if(u.isPresent()) {
 				return u.get();
+			}else {
+				throw new NotFoundException("User not found");
 			}
 		}
-		return null;
+		throw new BadRequestException("id Can't be null");
 	}
 	
 	@GetMapping("/email/{email}")
 	@PreAuthorize("Authenticated")
-	public Usuario obtenerUsuarios(@PathVariable("email") String email){
+	public Usuario obtenerUsuarios(@PathVariable("email") String email) throws BadRequestException, NotFoundException{
 		Optional<Usuario> u = us.buscarUsuarioEmail(email);
 		if(email!=null) {
 			if(u.isPresent()) {
 				return u.get();
+			}else {
+				throw new NotFoundException("User not found");
 			}
 		}
-		return null;
+		throw new BadRequestException("email Can't be null");
 	}
 	
 	/*http://localhost:8080/usuario/...*/

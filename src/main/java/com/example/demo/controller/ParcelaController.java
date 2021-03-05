@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controller.exceptions.BadRequestException;
+import com.example.demo.controller.exceptions.NotFoundException;
 import com.example.demo.model.Muestreo;
 import com.example.demo.model.Parcela;
 import com.example.demo.services.IParcelaService;
 
 @RestController
-@RequestMapping(ConstantesController.VERSION_API+"/parcela")
+@RequestMapping(ConstantesController.VERSION_API+"/parcelas")
 @CrossOrigin(origins = "http://localhost:3000")
 @PreAuthorize("Authenticated")
 public class ParcelaController {
@@ -64,18 +66,22 @@ public class ParcelaController {
 				return ps.actualizarParcela(oldParcela);
 			}
 			
+			throw new NotFoundException("Plot not found");
+			
 		}
 		
-		return null;
-
+		throw new BadRequestException("Id can't be null");
 	}
 	
 	//ELIMINAR UNA PARCELA
 	@DeleteMapping("/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
-		if(id!=null) {
+		Optional<Parcela> parcela = ps.buscarParcelaId(id);
+		if(parcela.isPresent()) {
 			ps.eliminarParcela(id);
 		}
+		
+		throw new NotFoundException("Plot not found");
 	}
 	
 	//LISTANDO TODAS LAS PARCELAS

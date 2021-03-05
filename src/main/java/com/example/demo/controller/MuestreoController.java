@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controller.exceptions.BadRequestException;
+import com.example.demo.controller.exceptions.NotFoundException;
 import com.example.demo.model.Estacion;
 import com.example.demo.model.Muestreo;
 import com.example.demo.model.Parcela;
 import com.example.demo.services.IMuestreoService;
 
 @RestController
-@RequestMapping(ConstantesController.VERSION_API+"/muestreo")
+@RequestMapping(ConstantesController.VERSION_API+"/muestreos")
 @CrossOrigin(origins = {"http://localhost:3000"})
 @PreAuthorize("Authenticated")
 public class MuestreoController {
@@ -59,18 +61,22 @@ public class MuestreoController {
 				
 				return ms.actualizarMuestreo(oldMuestreo);
 			}
+			
+			throw new NotFoundException("Sample not found");
 		}
 		
-		return null;
+		throw new BadRequestException("Id can't be null");
 	}
 	
 	//ELIMINAR UN MUESTREO
 	@DeleteMapping("/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
-		
-		if(id!=null) {
+		Optional<Muestreo> muestra = ms.buscarMuestreoId(id);
+		if(muestra.isPresent()) {
 			ms.eliminarMuestreo(id);
 		}
+		
+		throw new NotFoundException("Sample not found");
 	}
 	
 	//LISTANDO TODOS LOS MUESTREOS
@@ -88,8 +94,9 @@ public class MuestreoController {
 			if(m.isPresent()) {
 				return m.get();
 			}
+			throw new NotFoundException("Sample not found");
 		}
-		return null;
+		throw new BadRequestException("Id can't be null");
 	}
 	
 /*http://localhost:8080/muestreo/...*/

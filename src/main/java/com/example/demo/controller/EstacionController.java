@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controller.exceptions.BadRequestException;
+import com.example.demo.controller.exceptions.NotFoundException;
 import com.example.demo.model.Estacion;
 import com.example.demo.model.Muestreo;
 import com.example.demo.model.Usuario;
@@ -23,7 +25,7 @@ import com.example.demo.services.IEstacionService;
 
 
 @RestController
-@RequestMapping(ConstantesController.VERSION_API+"/estacion")
+@RequestMapping(ConstantesController.VERSION_API+"/estaciones")
 @CrossOrigin(origins = "http://localhost:3000")
 @PreAuthorize("Authenticated")
 public class EstacionController {
@@ -78,17 +80,22 @@ public class EstacionController {
 				
 				return es.actualizarEstacion(oldEstacion);
 			}
+			throw new NotFoundException("Station not found");
 		}
 		
-		return null;
+		throw new BadRequestException("Id can't be null");
 	}
 	
 	//ELIMINAR UNA ESTACION
 	@DeleteMapping("/{id}")
 	public void eliminar(@PathVariable("id") Long id) {
-		if(id!=null) {
+		Optional<Estacion> estacion = es.buscarEstacionId(id);
+		if(estacion.isPresent()) {
 			es.eliminarEstacion(id);
 		}
+		
+		throw new NotFoundException("Station not found");
+		
 	}
 	
 	//LISTANDO TODAS LAS ESTACIONES
@@ -99,16 +106,17 @@ public class EstacionController {
 	
 	//LISTANDO UNA ESTACIÓN
 	@GetMapping("/{id}")
-	public Estacion obtenerEstaciones(@PathVariable("id") Long id){
+	public Estacion obtenerEstacion(@PathVariable("id") Long id){
 		
 		if(id!=null) {
 			Optional<Estacion> c = es.buscarEstacionId(id);
 			if(c.isPresent()) {
 				return c.get();
 			}
+			throw new NotFoundException("Station not found");
 		}
+		throw new BadRequestException("Id can't be null");
 		
-		return null;
 	}
 	
 	/*http://localhost:8080/estacion/...*/
