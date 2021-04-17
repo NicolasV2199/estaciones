@@ -12,20 +12,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 @Entity
 @Table(name="estaciones")
+@JsonIgnoreProperties(ignoreUnknown = true) //ignorar campos desconocidos en un json entrante 
+											//posiblemente tambien ignora campos que estan en la bd y no en la entidad
 public class Estacion {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id; 
 	
-	@Column
+	@Column(nullable = false)
+	@Size(min = ConstantesModel.MIN_LENGTH_STRING_FIELD, max = ConstantesModel.MAX_LENGTH_STRING_FIELD )
 	private String nombre;
 	
 	@Column
@@ -37,19 +39,17 @@ public class Estacion {
 	@Column
 	private String unidad;
 	
-	@Column
+	@Column(nullable = false)
 	private float latitud;
 	
-	@Column
+	@Column(nullable = false)
 	private float longitud;
 	
-	//Relacion Estacion - Usuario
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idusuario")
 	@JsonIgnoreProperties("estaciones")
 	private Usuario usuario;
 	
-	//Relacion Estacion - Muestreo
 	@OneToOne(mappedBy="estacion", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("estacion")
 	private Muestreo muestreo; 

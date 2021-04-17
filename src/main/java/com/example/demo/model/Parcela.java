@@ -9,12 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Proxy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Proxy(lazy = false)
 @Table(name="Parcelas")
 public class Parcela {
 	
@@ -22,19 +20,18 @@ public class Parcela {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id; 
 	
-	@Column
+	@Column(nullable = false)
 	private float latitud;
 	
-	@Column
+	@Column(nullable = false)
 	private float longitud;
 	
-	@Column
+	@Column(nullable = false)
 	private float area;
 	
 	@Column
 	private String descripcion;
 	
-	//Relacion Parcela-Muestreo
 	@ManyToOne
 	@JoinColumn(name="idmuestreo")
 	@JsonIgnoreProperties("parcelas")

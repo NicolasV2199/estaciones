@@ -2,9 +2,10 @@ package com.example.demo.controller;
 
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,20 +16,83 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controller.exceptions.BadRequestException;
+import com.example.demo.controller.exceptions.NotFoundException;
 import com.example.demo.model.Muestreo;
 import com.example.demo.model.Parcela;
 import com.example.demo.services.IParcelaService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(ConstantesController.VERSION_API+"/parcelas")
 @CrossOrigin(origins = "http://localhost:3000")
+@PreAuthorize("Authenticated")
 public class ParcelaController {
 
 	@Autowired IParcelaService ps;
 	
-/*http://localhost:8080/parcela/...*/
+	//CREAR UNA PARCELA
+	@PostMapping
+	public Parcela crear(@RequestBody Parcela p) {
+		return ps.crearParcela(p);
+	}
 	
-	/*VALORES DE PRUEBA
+	//EDITAR UNA PARCELA
+	@PutMapping("/{id}")
+	public Parcela editar(@RequestBody Parcela p, @PathVariable("id") Long id) {
+		
+		String aux;
+		
+		if(id!=null) {
+			Optional<Parcela> old = ps.buscarParcelaId(id);
+			if(old.isPresent()) {
+				
+				Parcela oldParcela = old.get();
+				
+				float coordenada = p.getLatitud();
+				oldParcela.setLatitud(coordenada);
+				
+				coordenada = p.getLongitud();
+				oldParcela.setLongitud(coordenada);
+				
+				float area = p.getArea();
+				oldParcela.setArea(area);
+				
+				aux = p.getDescripcion();
+				oldParcela.setDescripcion(aux);
+				
+				Muestreo muestreo = p.getMuestreo();
+				oldParcela.setMuestreo(muestreo);
+				
+				return ps.actualizarParcela(oldParcela);
+			}
+			
+			throw new NotFoundException("Plot not found");
+			
+		}
+		
+		throw new BadRequestException("Id can't be null");
+	}
+	
+	//ELIMINAR UNA PARCELA
+	@DeleteMapping("/{id}")
+	public void eliminar(@PathVariable("id") Long id) {
+		Optional<Parcela> parcela = ps.buscarParcelaId(id);
+		if(parcela.isPresent()) {
+			ps.eliminarParcela(id);
+		}
+		
+		throw new NotFoundException("Plot not found");
+	}
+	
+	//LISTANDO TODAS LAS PARCELAS
+	@GetMapping
+	public List<Parcela> listarParcelas(){
+		return ps.listarTodasParcelas();
+	}
+	
+	/*http://localhost:8080/api/parcela/...*/
+	
+	/*Ejemplo de JSON esperado para crear una parcela
 	 {
 	 "latitud" : "150.25.63", 
     "longitud" : "180.23.65",
@@ -36,48 +100,6 @@ public class ParcelaController {
     "descripcion": "parcela nueva",
     "muestreo" : {"id": "1"}
     }
-	 * */
-	
-	//CREAR UNA PARCELA
-	@PostMapping("/parcela/crear")
-	public Parcela crear(@RequestBody Parcela p) {
-		return ps.crearParcela(p);
-	}
-	
-	//EDITAR UNA PARCELA
-	@PutMapping("/parcela/editar/{id}")
-	public Parcela editar(@RequestBody Parcela p, @PathVariable("id") Long id) {
-		Parcela oldParcela = ps.buscarParcelaId(id);
-		
-		float latitud = p.getLatitud();
-		oldParcela.setLatitud(latitud);
-		
-		float longitud = p.getLongitud();
-		oldParcela.setLongitud(longitud);
-		
-		float area = p.getArea();
-		oldParcela.setArea(area);
-		
-		String descripcion = p.getDescripcion();
-		oldParcela.setDescripcion(descripcion);
-		
-		Muestreo muestreo = p.getMuestreo();
-		oldParcela.setMuestreo(muestreo);
-		
-		return ps.actualizarParcela(oldParcela);
-	}
-	
-	//ELIMINAR UNA PARCELA
-	@DeleteMapping("/parcela/eliminar/{id}")
-	public void eliminar(@PathVariable("id") Long id) {
-		Parcela p = ps.buscarParcelaId(id);
-		ps.eliminarParcela(p);
-	}
-	
-	//LISTANDO TODAS LAS PARCELAS
-	@GetMapping("/parcela/listarparcelas")
-	public List<Parcela> listarParcelas(){
-		return ps.listarTodasParcelas();
-	}
+	*/
 
 }

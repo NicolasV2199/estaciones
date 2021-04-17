@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,8 @@ public class ParcelaServiceImp implements IParcelaService {
 	}
 
 	@Override
-	public void eliminarParcela(Parcela p) {
-		pr.delete(p);
+	public void eliminarParcela(Long id) {
+		pr.deleteById(id);
 
 	}
 
@@ -36,8 +37,8 @@ public class ParcelaServiceImp implements IParcelaService {
 	}
 
 	@Override
-	public Parcela buscarParcelaId(Long id) {
-		return pr.getOne(id);
+	public Optional<Parcela> buscarParcelaId(Long id) {
+		return pr.findById(id);
 	}
 
 }
